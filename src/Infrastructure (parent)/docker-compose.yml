@@ -1,0 +1,84 @@
+# docker run -d --rm -name mongo -p 27017:27017 -v mongodbdata:/data/db mongo
+
+version: "3.8"
+
+services:
+  logservice:
+    container_name: logservice
+    build:
+      context: ../../..
+      dockerfile: ../../../LogService/src/LogService/Dockerfile
+    restart: on-failure    
+  internalservice:
+    container_name: internalservice
+    build:
+      context: ../../..
+      dockerfile: ../InternalService/Dockerfile
+    restart: on-failure       
+  authservice:
+    container_name: authservice
+    build:
+      context: ../../..
+      dockerfile: ../../../AuthService/src/AuthService/Dockerfile
+    restart: on-failure 
+  gatewayservice:
+    container_name: gatewayservice
+    build:
+      context: ../../..
+      dockerfile: ./GatewayService/src/GatewayService/Dockerfile
+    restart: on-failure      
+  billingservice:
+    container_name: billingservice
+    build:
+      context: ../../..
+      dockerfile: ../../../BillingService/src/BillingService/Dockerfile
+    restart: on-failure   
+  paymentservice:
+    container_name: paymentservice
+    build:
+      context: ../../..
+      dockerfile: ../../../PaymentService/src/PaymentService/Dockerfile
+    restart: on-failure
+  transactionservice: 
+    container_name: transactionservice
+    build:
+      context: ../../..
+      dockerfile: ../../../TransactionService/src/TransactionService/Dockerfile
+    restart: on-failure
+  intelligenceservice:
+    container_name: intelligenceservice
+    build:
+      context: ../../..
+      dockerfile: ../../../IntelligenceService/src/IntelligenceService/Dockerfile
+    restart: on-failure               
+  localizationservice:
+    container_name: localizationservice
+    build:
+      context: ../../..
+      dockerfile: ../../../LocalizationService/src/LocalizationService/Dockerfile
+    restart: on-failure
+             
+
+
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq
+    environment:
+        - RABBITMQ_DEFAULT_USER=user
+        - RABBITMQ_DEFAULT_PASS=user
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq
+
+networks:
+  intranet:
+    name: intranet
+    driver: bridge
+
+volumes:
+  rabbitmqdata:
+    driver: local
+
