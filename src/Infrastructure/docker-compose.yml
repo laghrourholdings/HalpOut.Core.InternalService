@@ -3,79 +3,153 @@
 version: "3.8"
 
 services:
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: rabbitmq-fy
+    environment:
+      - RABBITMQ_DEFAULT_USER=user
+      - RABBITMQ_DEFAULT_PASS=user
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmqdata:/var/lib/rabbitmq
+    hostname: rabbitmq-fy
+    networks:
+      - internal
   logservice:
     container_name: logservice
     build:
-      context: ../../../
-      dockerfile: ./LogService/src/LogService/Dockerfile
-    restart: on-failure    
+      context: ../../../LogService/src/LogService/
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    networks:
+      - internal
+    ports:
+      - "4041:443"
+      - "5051:80"
+    depends_on:
+        - rabbitmq
   internalservice:
     container_name: internalservice
     build:
-      context: ../
-      dockerfile: ./InternalService/Dockerfile
-    restart: on-failure       
+      context: ../InternalService/
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    networks:
+      - internal
+    ports:
+      - "4042:443"
+      - "5052:80"
+    depends_on:
+      - rabbitmq
+      - logservice
   authservice:
     container_name: authservice
     build:
-      context: ../../../
-      dockerfile: ./AuthService/src/AuthService/Dockerfile
-    restart: on-failure 
+      context: ../../../AuthService/src/AuthService/
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    networks:
+      - internal
+    ports:
+      - "4043:443"
+      - "5053:80"
+    depends_on:
+      - rabbitmq
+      - logservice
   gatewayservice:
     container_name: gatewayservice
     build:
-      context: ../../../
-      dockerfile: ./GatewayService/src/GatewayService/Dockerfile
-    restart: on-failure      
+      context: ../../../GatewayService/src/GatewayService/
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    networks:
+      - internal
+      - external
+    ports:
+      - "4044:443"
+      - "5054:80"
+    depends_on:
+      - rabbitmq
+      - logservice
   billingservice:
     container_name: billingservice
     build:
-      context: ../../../
-      dockerfile: ./BillingService/src/BillingService/Dockerfile
-    restart: on-failure   
+      context: ../../../BillingService/src/BillingService/
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    networks:
+      - internal
+    ports:
+      - "4045:443"
+      - "5055:80"
+    depends_on:
+      - rabbitmq
+      - logservice
   paymentservice:
     container_name: paymentservice
     build:
-      context: ../../../
-      dockerfile: ./PaymentService/src/PaymentService/Dockerfile
+      context: ../../../PaymentService/src/PaymentService/
+      dockerfile: ./Dockerfile
     restart: on-failure
+    networks:
+      - internal
+    ports:
+      - "4046:443"
+      - "5056:80"
+    depends_on:
+      - rabbitmq
+      - logservice
   transactionservice: 
     container_name: transactionservice
     build:
-      context: ../../../
-      dockerfile: ./TransactionService/src/TransactionService/Dockerfile
+      context: ../../../TransactionService/src/TransactionService/
+      dockerfile: ./Dockerfile
     restart: on-failure
+    networks:
+      - internal
+    ports:
+      - "4047:443"
+      - "5057:80"
+    depends_on:
+      - rabbitmq
+      - logservice
   intelligenceservice:
     container_name: intelligenceservice
     build:
-      context: ../../../
-      dockerfile: ./IntelligenceService/src/IntelligenceService/Dockerfile
-    restart: on-failure               
+      context: ../../../IntelligenceService/src/IntelligenceService/
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    networks:
+      - internal
+    ports:
+      - "4048:443"
+      - "5058:80"
+    depends_on:
+      - rabbitmq
+      - logservice
   localizationservice:
     container_name: localizationservice
     build:
-      context: ../../../
-      dockerfile: ./LocalizationService/src/LocalizationService/Dockerfile
+      context: ../../../LocalizationService/src/LocalizationService/
+      dockerfile: ./Dockerfile
     restart: on-failure
-             
-
-
-  rabbitmq:
-    image: rabbitmq:management
-    container_name: rabbitmq
-    environment:
-        - RABBITMQ_DEFAULT_USER=user
-        - RABBITMQ_DEFAULT_PASS=user
+    networks:
+      - internal
     ports:
-      - 5672:5672
-      - 15672:15672
-    volumes:
-      - rabbitmqdata:/var/lib/rabbitmq
-    hostname: rabbitmq
+      - "4049:443"
+      - "5059:80"
+    depends_on:
+      - rabbitmq
+      - logservice
 
 networks:
-  intranet:
-    name: intranet
+  internal:
+    name: internal
+    driver: bridge
+  external:
+    name: external
     driver: bridge
 
 volumes:

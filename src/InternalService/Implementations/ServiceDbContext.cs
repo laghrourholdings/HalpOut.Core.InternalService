@@ -1,4 +1,5 @@
-﻿using CommonLibrary.Implementations.InternalService;
+﻿using CommonLibrary.Entities.InternalService;
+using CommonLibrary.Implementations.InternalService;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternalService.Implementations;

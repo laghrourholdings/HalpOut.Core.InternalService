@@ -7,7 +7,7 @@ using MassTransit;
 
 namespace InternalService.Implementations;
 
-public class ObjectRepository : IObjectRepository<IIObject>
+public class ObjectRepository : IObjectRepository<IObject>
 {
     private readonly ServiceDbContext _context;
     private readonly IPublishEndpoint _publishEndpoint;
@@ -17,43 +17,42 @@ public class ObjectRepository : IObjectRepository<IIObject>
         _context = context;
         _publishEndpoint = publishEndpoint;
     }
-    public Task<IReadOnlyCollection<IIObject>> GetAllAsync()
+    public Task<IReadOnlyCollection<IObject>> GetAllAsync()
     {
         throw new NotImplementedException();
     }
 
-    public Task<IReadOnlyCollection<IIObject>> GetAllAsync(Expression<Func<IIObject, bool>> filter)
+    public Task<IReadOnlyCollection<IObject>> GetAllAsync(Expression<Func<IObject, bool>> filter)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IIObject> GetAsync(Guid Id)
+    public Task<IObject> GetAsync(Guid Id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IIObject> GetAsync(Expression<Func<IIObject, bool>> filter)
+    public Task<IObject> GetAsync(Expression<Func<IObject, bool>> filter)
     {
         throw new NotImplementedException();
     }
 
-    public async Task CreateAsync(IIObject entity)
+    public async Task CreateAsync(IObject entity)
     {
-        await _context.Objects.AddAsync(entity);
-        await _publishEndpoint.Publish(new ObjectCreated(entity));
+        await _context.Objects.AddAsync((IIObject)entity);
     }
 
-    public Task UpdateAsync(IIObject entity)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeleteAsync(IIObject entity)
+    public Task UpdateAsync(IObject entity)
     {
         throw new NotImplementedException();
     }
 
-    public Task SuspendAsync(IIObject entity)
+    public Task DeleteAsync(IObject entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SuspendAsync(IObject entity)
     {
         throw new NotImplementedException();
     }
