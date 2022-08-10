@@ -14,7 +14,7 @@ services:
       - 15672:15672
     volumes:
       - rabbitmqdata:/var/lib/rabbitmq
-    hostname: rabbitmq
+    hostname: rabbitmq-fy
 
 volumes:
   rabbitmqdata:

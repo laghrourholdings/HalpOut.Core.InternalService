@@ -3,6 +3,17 @@
 version: "3.8"
 
 services:
+  webclient:
+    container_name: webclient
+    build:
+      context: ../../../ClientServices/WebClient/
+      dockerfile: ./Dockerfile
+    restart: on-failure
+    networks:
+      - internal
+    ports:
+      - "8081:5224"
+      - "8080:7000"
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq-fy
