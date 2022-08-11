@@ -1,13 +1,16 @@
-﻿using System.Linq.Expressions;
+﻿using System.Collections.Immutable;
+using System.Linq.Expressions;
+using System.Reflection;
 using CommonLibrary.Contracts.Gateway_Internal_Contracts;
 using CommonLibrary.Entities.InternalService;
 using CommonLibrary.Implementations;
 using CommonLibrary.Repositories;
 using MassTransit;
+using Microsoft.EntityFrameworkCore;
 
 namespace InternalService.Implementations;
 
-public class ObjectRepository : IObjectRepository
+public class ObjectRepository : IObjectRepository<IObject>
 {
     private readonly ServiceDbContext _context;
     private readonly IPublishEndpoint _publishEndpoint;
@@ -17,9 +20,9 @@ public class ObjectRepository : IObjectRepository
         _context = context;
         _publishEndpoint = publishEndpoint;
     }
-    public Task<IEnumerable<IObject>> GetAllAsync()
+    public async Task<IEnumerable<IObject>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await _context.Objects.ToListAsync();
     }
 
     public Task<IEnumerable<IObject>> GetAllAsync(Expression<Func<IObject, bool>> filter)

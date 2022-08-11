@@ -2,19 +2,17 @@
 using CommonLibrary.Contracts.Gateway_Internal_Contracts;
 using CommonLibrary.Entities.InternalService;
 using CommonLibrary.Implementations;
-using CommonLibrary.Interfaces;
 using CommonLibrary.Repositories;
-using InternalService.Implementations;
 using MassTransit;
 
-namespace InternalService.Slots.CreateObjectContracts;
+namespace InternalService.Slots;
 
 public class CreateObjectConsumer : IConsumer<CreateObject>
 {
     
-    private readonly IObjectRepository _objectRepository;
+    private readonly IObjectRepository<IObject> _objectRepository;
     
-    public CreateObjectConsumer(IObjectRepository objectRepository)
+    public CreateObjectConsumer(IObjectRepository<IObject> objectRepository)
     {
         _objectRepository = objectRepository;
     }
@@ -37,7 +35,7 @@ public class CreateObjectConsumer : IConsumer<CreateObject>
         };
         
         await _objectRepository.CreateAsync(obj);
-        var response = new ObjectServiceBusResponse<Guid, IObject>
+        var response = new IIObjectServiceBusResponse
         {
             Subject = obj,
             Descriptor = $"Creation for object {obj.Id} completed with success.",

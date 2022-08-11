@@ -6,19 +6,27 @@ using InternalService.Implementations;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+        policy  =>
+        {
+            policy.AllowAnyOrigin();
+        });
+});
 // Add services to the container.
 builder.Services.Configure<ServiceSettings>(builder.Configuration.GetSection("ServiceSettings"));
 builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQSettings"));
 builder.Services.AddMassTransitWithRabbitMq();
-builder.Services.AddScoped<IObjectRepository, ObjectRepository>();
+builder.Services.AddScoped<IObjectRepository<IObject>, ObjectRepository>();
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ServiceDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
 var app = builder.Build();
-
+app.UseCors(MyAllowSpecificOrigins);
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

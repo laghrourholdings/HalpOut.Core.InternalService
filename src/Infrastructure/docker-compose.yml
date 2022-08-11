@@ -12,8 +12,8 @@ services:
     networks:
       - internal
     ports:
-      - "8081:5224"
-      - "8080:7000"
+      - "8081:443"
+      - "8080:80"
   rabbitmq:
     image: rabbitmq:management
     container_name: rabbitmq-fy
