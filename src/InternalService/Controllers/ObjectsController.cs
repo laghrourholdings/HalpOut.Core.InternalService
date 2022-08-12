@@ -1,4 +1,4 @@
-﻿using CommonLibrary.Entities.InternalService;
+﻿using CommonLibrary.Core;
 using CommonLibrary.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

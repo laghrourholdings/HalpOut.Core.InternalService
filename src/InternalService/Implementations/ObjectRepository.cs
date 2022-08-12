@@ -1,9 +1,5 @@
-﻿using System.Collections.Immutable;
-using System.Linq.Expressions;
-using System.Reflection;
-using CommonLibrary.Contracts.Gateway_Internal_Contracts;
-using CommonLibrary.Entities.InternalService;
-using CommonLibrary.Implementations;
+﻿using System.Linq.Expressions;
+using CommonLibrary.Core;
 using CommonLibrary.Repositories;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;

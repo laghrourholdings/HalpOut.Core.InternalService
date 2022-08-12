@@ -1,43 +1,26 @@
-using CommonLibrary.Entities.InternalService;
-using CommonLibrary.Extentions.MassTransit;
+using CommonLibrary.AspNetCore;
+using CommonLibrary.Core;
 using CommonLibrary.Repositories;
-using CommonLibrary.Settings;
 using InternalService.Implementations;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
+using ILogger = Serilog.ILogger;
 
 var builder = WebApplication.CreateBuilder(args);
+
 var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(name: MyAllowSpecificOrigins,
-        policy  =>
-        {
-            policy.AllowAnyOrigin();
-        });
-});
-// Add services to the container.
-builder.Services.Configure<ServiceSettings>(builder.Configuration.GetSection("ServiceSettings"));
-builder.Services.Configure<RabbitMQSettings>(builder.Configuration.GetSection("RabbitMQSettings"));
-builder.Services.AddMassTransitWithRabbitMq();
+
+ILogger logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+builder.Services.AddCommonLibrary(builder.Configuration, builder.Logging, logger , MyAllowSpecificOrigins);
 builder.Services.AddScoped<IObjectRepository<IObject>, ObjectRepository>();
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ServiceDbContext>(opt => opt.UseInMemoryDatabase("InMem"));
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
-app.UseCors(MyAllowSpecificOrigins);
-// Configure the HTTP request pipeline.
+app.UseCommonLibrary(MyAllowSpecificOrigins);
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
 app.Run();

@@ -1,7 +1,7 @@
 ﻿using System.Net;
-using CommonLibrary.Contracts.Gateway_Internal_Contracts;
-using CommonLibrary.Entities.InternalService;
-using CommonLibrary.Implementations;
+using CommonLibrary.AspNetCore.Contracts.Gateway_Internal_Contracts;
+using CommonLibrary.AspNetCore.ServiceBus.Implementations;
+using CommonLibrary.Core;
 using CommonLibrary.Repositories;
 using MassTransit;
 
