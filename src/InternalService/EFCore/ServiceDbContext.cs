@@ -1,7 +1,7 @@
 ﻿using CommonLibrary.Core;
 using Microsoft.EntityFrameworkCore;
 
-namespace InternalService.Implementations;
+namespace InternalService.EFCore;
 
 public class ServiceDbContext : DbContext
 {

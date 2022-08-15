@@ -1,8 +1,9 @@
 ﻿using System.Net;
-using CommonLibrary.AspNetCore.Contracts.Gateway_Internal_Contracts;
+using CommonLibrary.AspNetCore;
+using CommonLibrary.AspNetCore.Contracts;
+using CommonLibrary.AspNetCore.ServiceBus;
 using CommonLibrary.AspNetCore.ServiceBus.Implementations;
 using CommonLibrary.Core;
-using CommonLibrary.Repositories;
 using MassTransit;
 
 namespace InternalService.Slots;
@@ -20,11 +21,11 @@ public class CreateObjectConsumer : IConsumer<CreateObject>
     public async Task Consume(ConsumeContext<CreateObject> context)
     {
         var message = context.Message.Payload;
-        var newObjectGuid = message.Subject;
-        Console.WriteLine($"Creating... {newObjectGuid}");
+        var requestedGuid = message.Subject;
+        Console.WriteLine($"Creating... {requestedGuid}");
         IIObject obj = new IIObject
         {
-            Id = newObjectGuid,
+            Id = requestedGuid,
             CreationDate = DateTimeOffset.Now,
             IsDeleted = false,
             DeletedDate = default,
@@ -35,7 +36,7 @@ public class CreateObjectConsumer : IConsumer<CreateObject>
         };
         
         await _objectRepository.CreateAsync(obj);
-        var response = new IIObjectServiceBusResponse
+        var response = new ServiceBusRequestReponse<Guid, IIObject>()
         {
             Subject = obj,
             Descriptor = $"Creation for object {obj.Id} completed with success.",

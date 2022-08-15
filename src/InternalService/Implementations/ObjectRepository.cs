@@ -1,6 +1,9 @@
 ﻿using System.Linq.Expressions;
+using CommonLibrary.AspNetCore;
+using CommonLibrary.AspNetCore.Logging;
+using CommonLibrary.AspNetCore.ServiceBus;
 using CommonLibrary.Core;
-using CommonLibrary.Repositories;
+using InternalService.EFCore;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,7 +39,8 @@ public class ObjectRepository : IObjectRepository<IObject>
         throw new NotImplementedException();
     }
 
-    public async Task CreateAsync(IObject entity)
+    public async Task CreateAsync(
+        IObject entity)
     {
         await _context.Objects.AddAsync((IIObject)entity);
         await _context.SaveChangesAsync();
@@ -53,6 +57,11 @@ public class ObjectRepository : IObjectRepository<IObject>
     }
 
     public Task SuspendAsync(IObject entity)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task BindLogHandle(Guid objectId, Guid logHandle)
     {
         throw new NotImplementedException();
     }

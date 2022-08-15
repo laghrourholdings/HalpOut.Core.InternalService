@@ -1,8 +1,8 @@
 ﻿using System.Net;
-using CommonLibrary.AspNetCore.Contracts.Gateway_Internal_Contracts;
+using CommonLibrary.AspNetCore;
+using CommonLibrary.AspNetCore.Contracts;
 using CommonLibrary.AspNetCore.ServiceBus.Implementations;
 using CommonLibrary.Core;
-using CommonLibrary.Repositories;
 using MassTransit;
 
 namespace InternalService.Slots;
@@ -20,7 +20,7 @@ public class GetAllObjectsConsumer : IConsumer<GetAllObjects>
     public async Task Consume(ConsumeContext<GetAllObjects> context)
     {
         var iiObjects = await _objectRepository.GetAllAsync();
-        var response = new IIObjectServiceBusResponse
+        var response = new IiObjectServiceBusMessageResponse
         {
             Subjects = iiObjects,
             Descriptor = $"All objects requested from: {context.Message.Payload.Contract}",

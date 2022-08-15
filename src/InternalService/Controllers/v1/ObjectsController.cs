@@ -1,10 +1,11 @@
-﻿using CommonLibrary.Core;
-using CommonLibrary.Repositories;
+﻿using CommonLibrary.AspNetCore;
+using CommonLibrary.Core;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InternalService.Controllers;
+namespace InternalService.Controllers.v1;
 
-[Route("[controller]")]
+[Route("api/v{version:apiVersion}/[controller]")]
+[ApiVersion("1.0")]
 [ApiController]
 public class ObjectsController : ControllerBase
 {
@@ -22,6 +23,7 @@ public class ObjectsController : ControllerBase
         await _objectRepository.CreateAsync(null);
         return Ok("");
     }
+ 
     
     [HttpGet()]
     public async Task<IActionResult> GetAllObjects()
