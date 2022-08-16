@@ -30,7 +30,6 @@ public class CreateObjectConsumer : IConsumer<CreateObject>
     
     public async Task Consume(ConsumeContext<CreateObject> context)
     {
-        var message = context.Message.Payload;
         var requestedGuid = Guid.NewGuid();
         IIObject obj = new IIObject
         {
@@ -48,7 +47,7 @@ public class CreateObjectConsumer : IConsumer<CreateObject>
             Subject = obj,
             Descriptor = $"Requesting LogHandleId for object {requestedGuid}"
         };
-        _logger.Information(request.Descriptor);
+        _logger.Information("Received request: {@Context}",context);
         var logContext = request.GetLogContext(_configuration, LogLevel.Information);
         _logger.GeneralToBusLog(
             logContext,
