@@ -2,6 +2,7 @@
 using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Contracts;
 using CommonLibrary.AspNetCore.ServiceBus.Implementations;
+using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using MassTransit;
 
@@ -10,9 +11,9 @@ namespace InternalService.Slots;
 public class GetAllObjectsConsumer : IConsumer<GetAllObjects>
 {
     
-    private readonly IObjectRepository<IObject> _objectRepository;
+    private readonly IObjectRepository<IIObject> _objectRepository;
     
-    public GetAllObjectsConsumer(IObjectRepository<IObject> objectRepository)
+    public GetAllObjectsConsumer(IObjectRepository<IIObject> objectRepository)
     {
         _objectRepository = objectRepository;
     }
@@ -23,7 +24,7 @@ public class GetAllObjectsConsumer : IConsumer<GetAllObjects>
         var response = new IiObjectServiceBusMessageResponse
         {
             Subjects = iiObjects,
-            Descriptor = $"All objects requested from: {context.Message.Payload.Contract}",
+            Descriptor = ServiceSettings.GetMessage($"All objects requested from: {@context.Message.Payload.Contract}"),
             InitialRequest = context.Message.Payload,
             Contract = nameof(GetAllObjectsResponse),
             StatusCode = HttpStatusCode.OK

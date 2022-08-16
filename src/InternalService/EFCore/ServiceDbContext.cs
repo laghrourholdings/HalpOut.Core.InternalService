@@ -1,4 +1,5 @@
 ﻿using CommonLibrary.Core;
+using CommonLibrary.ModelBuilders;
 using Microsoft.EntityFrameworkCore;
 
 namespace InternalService.EFCore;
@@ -10,5 +11,9 @@ public class ServiceDbContext : DbContext
             
     }
 
-    public DbSet<IIObject> Objects { get; set; }
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.BuildCommonLibrary();
+    }
+    public DbSet<IIObject?> Objects { get; set; }
 }

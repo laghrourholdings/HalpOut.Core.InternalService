@@ -12,9 +12,9 @@ namespace InternalService.Controllers.v1;
 public class InternalController : ControllerBase
 {
     private readonly ILogger _logger;
-    private readonly IObjectRepository<IObject> _objectRepository;
+    private readonly IObjectRepository<IIObject> _objectRepository;
 
-    public InternalController(IObjectRepository<IObject> objectRepository, ILogger logger)
+    public InternalController(IObjectRepository<IIObject> objectRepository, ILogger logger)
     {
         _objectRepository = objectRepository;
         _logger = logger;

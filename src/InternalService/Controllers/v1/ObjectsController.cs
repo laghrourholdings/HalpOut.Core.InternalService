@@ -9,9 +9,9 @@ namespace InternalService.Controllers.v1;
 [ApiController]
 public class ObjectsController : ControllerBase
 {
-    private readonly IObjectRepository<IObject> _objectRepository;
+    private readonly IObjectRepository<IIObject> _objectRepository;
     
-    public ObjectsController(IObjectRepository<IObject> objectRepository)
+    public ObjectsController(IObjectRepository<IIObject> objectRepository)
     {
         _objectRepository = objectRepository;
     }
