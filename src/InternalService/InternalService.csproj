@@ -24,6 +24,19 @@
 
     <ItemGroup>
       <Folder Include="Signals" />
+      <Folder Update="..\Infrastructure (parent)" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Include="..\Infrastructure (parent)\docker-compose.yml">
+        <Link>Infrastructure (parent)\docker-compose.yml</Link>
+      </Content>
+      <Content Include="..\Infrastructure (rabbitmq)\docker-compose.yml">
+        <Link>Infrastructure (rabbitmq)\docker-compose.yml</Link>
+      </Content>
+      <Content Include="..\Infrastructure\docker-compose.yml">
+        <Link>Infrastructure\docker-compose.yml</Link>
+      </Content>
     </ItemGroup>
 
 

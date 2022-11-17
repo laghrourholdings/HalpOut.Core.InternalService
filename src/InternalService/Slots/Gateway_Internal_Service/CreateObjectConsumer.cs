@@ -1,7 +1,9 @@
-﻿using CommonLibrary.AspNetCore;
+﻿using System.Net;
+using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Contracts;
 using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.ServiceBus;
+using CommonLibrary.AspNetCore.ServiceBus.Implementations;
 using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using MassTransit;
@@ -30,6 +32,7 @@ public class CreateObjectConsumer : IConsumer<CreateObject>
     
     public async Task Consume(ConsumeContext<CreateObject> context)
     {
+        var payload = context.Message.Payload;
         var requestedGuid = Guid.NewGuid();
         IIObject obj = new IIObject
         {
@@ -40,19 +43,31 @@ public class CreateObjectConsumer : IConsumer<CreateObject>
             IsSuspended = false,
             SuspendedDate = default,
             LogHandleId = default,
-            Descriptor = null
+            Descriptor = "Basic object"
         };
-        var request = new ServiceBusRequest<IIObject>
+        await _objectRepository.CreateAsync(obj);
+        var response = new ServiceBusMessageReponse<IIObject>
         {
             Subject = obj,
-            Descriptor = $"Requesting LogHandleId for object {requestedGuid}"
+            Descriptor = $"Creation for object {obj.Id} completed with success.",
+            InitialRequest = payload,
+            Contract = nameof(ObjectCreated),
+            StatusCode = HttpStatusCode.OK
         };
-        _logger.Information("Received request: {@Context}",context);
-        var logContext = request.GetLogContext(_configuration, LogLevel.Information);
-        _logger.GeneralToBusLog(
-            logContext,
-            $"Object created: {requestedGuid}",
-            _publishEndpoint, new LogCreateObject(logContext));
-        await _objectRepository.UpdateOrCreateAsync(obj);
+        _logger.Debug("{@Response}",response);
+        await context.Publish(new ObjectCreated(response));
     }
 }
+
+/*
+ var request = new ServiceBusPayload<IIObject>
+{
+    Subject = obj,
+    Descriptor = $"Requesting LogHandleId for object {requestedGuid}"
+};
+var logContext = request.GetLogContext(_configuration, LogLevel.Information);
+_logger.GeneralToBusLog(
+    logContext,
+    $"Object created: {requestedGuid}",
+    _publishEndpoint, new LogCreateObject(logContext));
+*/

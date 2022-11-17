@@ -23,5 +23,5 @@ public class ServiceDbContext : DbContext
     {
         modelBuilder.BuildCommonLibrary();
     }
-    public DbSet<IIObject?> Objects { get; set; }
+    public DbSet<IIObject> Objects { get; set; }
 }

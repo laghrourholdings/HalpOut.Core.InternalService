@@ -52,21 +52,22 @@ public class ObjectRepository : IObjectRepository<IIObject>
     public async Task CreateAsync(
         IIObject entity)
     {
-        IIObject? obj = await _context.Objects.SingleOrDefaultAsync(x => x != null && x.Id == entity.Id);
+        IIObject? obj = await _context.Objects.SingleOrDefaultAsync(x => x.Id == entity.Id);
         if (obj is not null)
         {
             _logger.Critical($"Object {entity} already exists");
             throw new Exception($"Object with Id {entity.Id} already exists");
         }
-
-        await _context.Objects.AddAsync(obj);
+        await _context.Objects.AddAsync(entity);
         await _context.SaveChangesAsync();
+        _logger.Information("Object created: {@Object}",entity);
     }
     
 
-    public Task UpdateAsync(IIObject entity)
+    public async Task UpdateAsync(IIObject entity)
     {
-        throw new NotImplementedException();
+        _context.Update(entity);
+        await _context.SaveChangesAsync();
     }
 
     public async Task UpdateOrCreateAsync(
