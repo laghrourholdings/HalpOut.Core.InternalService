@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿/*
+using System.Net;
 using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Contracts.Objects;
 using CommonLibrary.AspNetCore.ServiceBus.Implementations;
@@ -24,7 +25,7 @@ public class GetAllObjectsConsumer : IConsumer<GetAllObjects>
         var response = new IiObjectServiceBusMessageResponse
         {
             Subjects = iiObjects,
-            Descriptor = ServiceSettings.GetMessage($"All objects requested from: {@context.Message.Payload.Contract}"),
+            Descriptor = $"All objects requested from: {context.Message.Payload.Contract}",
             InitialRequest = context.Message.Payload,
             Contract = nameof(GetAllObjectsResponse),
             StatusCode = HttpStatusCode.OK
@@ -32,3 +33,4 @@ public class GetAllObjectsConsumer : IConsumer<GetAllObjects>
         await context.RespondAsync(new GetAllObjectsResponse(response));
     }
 }
+*/
