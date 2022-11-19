@@ -62,7 +62,12 @@ public class ObjectRepository : IObjectRepository<IIObject>
         await _context.SaveChangesAsync();
         _logger.Information("Object created: {@Object}",entity);
     }
-    
+
+    public Task RangeAsync(IEnumerable<IIObject> entity)
+    {
+        throw new NotImplementedException();
+    }
+
 
     public async Task UpdateAsync(IIObject entity)
     {
