@@ -32,7 +32,7 @@ services:
       POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
       POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
     volumes:
-      - ./db-data/:/var/lib/postgresql/data/
+      - ./db-data-logservice_postgredb/:/var/lib/postgresql/data/
   internalservice_postgredb:
     # Official Postgres image from DockerHub (we use the last version)
     image: 'postgres:latest'
@@ -50,7 +50,7 @@ services:
       POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
       POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
     volumes:
-      - ./db-data/:/var/lib/postgresql/data/
+      - ./db-data-internalservice_postgredb/:/var/lib/postgresql/data/
 volumes:
   rabbitmqdata:
     driver: local

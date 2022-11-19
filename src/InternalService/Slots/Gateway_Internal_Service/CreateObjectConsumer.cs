@@ -50,7 +50,7 @@ public class CreateObjectConsumer : IConsumer<CreateObject>
         var response = new ServiceBusMessageReponse<IIObject>
         {
             Subject = obj,
-            Descriptor = $"Creation for object {obj.Id} completed with success.",
+            Descriptor =ServiceSettings.GetMessage($"Creation for object {obj.Id} completed with success.") ,
             InitialRequest = payload,
             Contract = nameof(ObjectCreated),
             StatusCode = HttpStatusCode.OK

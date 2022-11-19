@@ -10,6 +10,9 @@
 *.userosscache
 *.sln.docstates
 src/Infrastructure\ (rabbitmq)/db-data/
+src/Infrastructure\ (rabbitmq)/db-data-internalservice_postgredb/
+src/Infrastructure\ (rabbitmq)/db-data-logservice_postgredb/
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

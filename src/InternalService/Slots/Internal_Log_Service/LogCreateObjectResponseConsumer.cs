@@ -2,6 +2,7 @@
 using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Contracts;
 using CommonLibrary.AspNetCore.Contracts.Objects;
+using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.ServiceBus;
 using CommonLibrary.AspNetCore.ServiceBus.Implementations;
 using CommonLibrary.AspNetCore.Settings;
@@ -16,11 +17,16 @@ public class LogCreateObjectResponseConsumer : IConsumer<UpdateObjectLogHandle>
     
     private readonly IObjectRepository<IIObject> _objectRepository;
     private readonly ILogger _logger;
+    private readonly IConfiguration _config;
 
-    public LogCreateObjectResponseConsumer(IObjectRepository<IIObject> objectRepository, ILogger logger)
+    public LogCreateObjectResponseConsumer(
+        IObjectRepository<IIObject> objectRepository,
+        ILogger logger,
+        IConfiguration config)
     {
         _objectRepository = objectRepository;
         _logger = logger;
+        _config = config;
     }
 
     
@@ -34,7 +40,6 @@ public class LogCreateObjectResponseConsumer : IConsumer<UpdateObjectLogHandle>
             await Task.CompletedTask; 
         }
         await _objectRepository.UpdateAsync(obj);
-        _logger.Information("Object with ID: {@ObjectID} assigned LogHandleId: {@LogHandleID}", obj.Id,obj.LogHandleId);
         await Task.CompletedTask;
     }
 }

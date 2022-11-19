@@ -2,6 +2,7 @@
 using AutoMapper;
 using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Logging;
+using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using InternalService.EFCore;
 using MassTransit;
@@ -15,17 +16,20 @@ public class ObjectRepository : IObjectRepository<IIObject>
     private readonly IPublishEndpoint _publishEndpoint;
     private static IMapper _mapper;
     private readonly ILogger _logger;
+    private readonly IConfiguration _config;
 
     public ObjectRepository(
         ServiceDbContext context,
         IPublishEndpoint publishEndpoint,
         IMapper mapper,
-        ILogger logger)
+        ILogger logger,
+        IConfiguration config)
     {
         _context = context;
         _publishEndpoint = publishEndpoint;
         _mapper = mapper;
         _logger = logger;
+        _config = config;
     }
 
 
@@ -55,7 +59,7 @@ public class ObjectRepository : IObjectRepository<IIObject>
         IIObject? obj = await _context.Objects.SingleOrDefaultAsync(x => x.Id == entity.Id);
         if (obj is not null)
         {
-            _logger.Critical($"Object {entity} already exists");
+            _logger.Error("Object {entity} already exists", entity);
             throw new Exception($"Object with Id {entity.Id} already exists");
         }
         await _context.Objects.AddAsync(entity);
@@ -72,6 +76,7 @@ public class ObjectRepository : IObjectRepository<IIObject>
     public async Task UpdateAsync(IIObject entity)
     {
         _context.Update(entity);
+        _logger.InformationToBusLog(_config,  $"Object {entity.Id} assigned {entity.LogHandleId}" ,entity.LogHandleId, _publishEndpoint);
         await _context.SaveChangesAsync();
     }
 
