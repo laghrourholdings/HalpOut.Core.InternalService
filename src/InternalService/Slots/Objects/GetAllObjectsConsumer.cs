@@ -1,13 +1,12 @@
 ﻿using System.Net;
 using CommonLibrary.AspNetCore;
-using CommonLibrary.AspNetCore.Contracts;
 using CommonLibrary.AspNetCore.Contracts.Objects;
 using CommonLibrary.AspNetCore.ServiceBus.Implementations;
 using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using MassTransit;
 
-namespace InternalService.Slots;
+namespace InternalService.Slots.Objects;
 
 public class GetAllObjectsConsumer : IConsumer<GetAllObjects>
 {
