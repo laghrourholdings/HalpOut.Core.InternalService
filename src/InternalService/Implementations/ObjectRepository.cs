@@ -32,13 +32,12 @@ public class ObjectRepository : IObjectRepository<IIObject>
         _config = config;
     }
 
-
-    public async Task<IEnumerable<IIObject>> GetAllAsync()
+    public async Task<IEnumerable<IIObject>?> GetAllAsync()
     {
         return await _context.Objects.ToListAsync();
     }
 
-    public async Task<IEnumerable<IIObject>> GetAllAsync(Expression<Func<IIObject, bool>> filter)
+    public async Task<IEnumerable<IIObject>?> GetAllAsync(Expression<Func<IIObject, bool>> filter)
     {
         return await _context.Objects.ToListAsync();
     }
