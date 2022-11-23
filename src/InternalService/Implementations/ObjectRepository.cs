@@ -75,7 +75,7 @@ public class ObjectRepository : IObjectRepository<IIObject>
     public async Task UpdateAsync(IIObject entity)
     {
         _context.Update(entity);
-        _logger.InformationToBusLog(_config,  $"Object {entity.Id} assigned {entity.LogHandleId}" ,entity.LogHandleId, _publishEndpoint);
+        _logger.InformationToBusLog(_config,  $"Object {entity.Id} assigned {entity.LogHandleId}" , entity.LogHandleId, _publishEndpoint);
         await _context.SaveChangesAsync();
     }
 
