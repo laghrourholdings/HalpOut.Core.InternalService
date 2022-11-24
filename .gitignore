@@ -12,7 +12,8 @@
 src/Infrastructure\ (rabbitmq)/db-data/
 src/Infrastructure\ (rabbitmq)/db-data-internalservice_postgredb/
 src/Infrastructure\ (rabbitmq)/db-data-logservice_postgredb/
-
+src/Infrastructure\ (rabbitmq)/db-data-authservice_postgredb/
+src/Infrastructure\ (rabbitmq)/db-data-authservice_user_postgredb/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -399,3 +400,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+src/Infrastructure (rabbitmq)/db-data-authservice_postgredb/base/1/112
