@@ -60,7 +60,7 @@ services:
       POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
       POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
     volumes:
-      - ./db-data-internalservice_postgredb/:/var/lib/postgresql/data/
+      - ./db-data-authservice_postgredb/:/var/lib/postgresql/data/
   authservice_user_postgredb:
     # Official Postgres image from DockerHub (we use the last version)
     image: 'postgres:latest'
@@ -78,7 +78,7 @@ services:
       POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
       POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
     volumes:
-      - ./db-data-internalservice_postgredb/:/var/lib/postgresql/data/
+      - ./db-data-authservice_user_postgredb/:/var/lib/postgresql/data/
   authservice_redis:
     image: "redis:alpine"
     

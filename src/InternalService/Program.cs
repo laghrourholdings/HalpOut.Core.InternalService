@@ -2,7 +2,6 @@ using CommonLibrary.AspNetCore;
 using CommonLibrary.Core;
 using InternalService.EFCore;
 using InternalService.Implementations;
-using Microsoft.EntityFrameworkCore;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

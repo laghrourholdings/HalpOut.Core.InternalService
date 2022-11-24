@@ -2,7 +2,6 @@
 using AutoMapper;
 using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Logging;
-using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using InternalService.EFCore;
 using MassTransit;
