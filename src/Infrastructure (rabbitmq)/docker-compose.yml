@@ -1,6 +1,6 @@
 # docker run -d --rm -name mongo -p 27017:27017 -v mongodbdata:/data/db mongo
 
-version: "3.8"
+version: "3.6"
 
 services:
   rabbitmq:
@@ -12,42 +12,34 @@ services:
     ports:
       - 5672:5672
       - 15672:15672
-    volumes:
-      - rabbitmqdata:/var/lib/rabbitmq
     hostname: rabbitmq-fy
   logservice_postgredb:
-    image: 'postgres:latest'
+    image: 'postgres'
     ports:
       - 6000:5432
     environment:
-      POSTGRES_USER: username # The PostgreSQL user (useful to connect to the database)
-      POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
-      POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
-    command: postgres -c stats_temp_directory=/tmp
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password 
+      POSTGRES_DB: default_database 
     volumes:
-      - ./db-data-logservice_postgredb/:/var/lib/postgresql/data/
+      - ./database-data-logservice:/var/lib/postgresql/data
+      
   internalservice_postgredb:
-    # Official Postgres image from DockerHub (we use the last version)
-    image: 'postgres:latest'
-    # By default, a Postgres database is running on the 5432 port.
-    # If we want to access the database from our computer (outside the container),
-    # we must share the port with our computer's port.
-    # The syntax is [port we want on our machine]:[port we want to retrieve in the container]
-    # Note: You are free to change your computer's port,
-    # but take into consideration that it will change the way
-    # you are connecting to your database.
+    image: 'postgres'
+
     ports:
       - 6001:5432
-    command: postgres -c stats_temp_directory=/tmp
     environment:
-      POSTGRES_USER: username # The PostgreSQL user (useful to connect to the database)
-      POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
-      POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password 
+      POSTGRES_DB: default_database 
     volumes:
-      - ./db-data-internalservice_postgredb/:/var/lib/postgresql/data/
+      - ./database-data-internalservice:/var/lib/postgresql/data
+  
   authservice_postgredb:
-    # Official Postgres image from DockerHub (we use the last version)
-    image: 'postgres:latest'
+    image: 'postgres'
     # By default, a Postgres database is running on the 5432 port.
     # If we want to access the database from our computer (outside the container),
     # we must share the port with our computer's port.
@@ -55,34 +47,27 @@ services:
     # Note: You are free to change your computer's port,
     # but take into consideration that it will change the way
     # you are connecting to your database.
-    command: postgres -c stats_temp_directory=/tmp
     ports:
       - 6002:5432
     environment:
-      POSTGRES_USER: username # The PostgreSQL user (useful to connect to the database)
-      POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
-      POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password 
+      POSTGRES_DB: default_database 
     volumes:
-      - ./db-data-authservice_postgredb/:/var/lib/postgresql/data/
+      - ./database-data-authservice:/var/lib/postgresql/data
   authservice_user_postgredb:
-    # Official Postgres image from DockerHub (we use the last version)
-    image: 'postgres:latest'
-    # By default, a Postgres database is running on the 5432 port.
-    # If we want to access the database from our computer (outside the container),
-    # we must share the port with our computer's port.
-    # The syntax is [port we want on our machine]:[port we want to retrieve in the container]
-    # Note: You are free to change your computer's port,
-    # but take into consideration that it will change the way
-    # you are connecting to your database.
+    image: 'postgres'
+
     ports:
       - 6022:5432
-    command: postgres -c stats_temp_directory=/tmp
     environment:
-      POSTGRES_USER: username # The PostgreSQL user (useful to connect to the database)
-      POSTGRES_PASSWORD: password # The PostgreSQL password (useful to connect to the database)
-      POSTGRES_DB: default_database # The PostgreSQL default database (automatically created at first launch)
+      POSTGRES_HOST: 127.0.0.1
+      POSTGRES_USER: postgres 
+      POSTGRES_PASSWORD: password 
+      POSTGRES_DB: default_database
     volumes:
-      - ./db-data-authservice_user_postgredb/:/var/lib/postgresql/data/
+      - ./database-data-authserviceuser:/var/lib/postgresql/data
   authservice_redis:
     image: "redis:alpine"
     
@@ -94,13 +79,18 @@ services:
     volumes:
       - ./www:/home/distressedpro/public_html
       - ./conf:/etc/apache2/sites-available
-    
+      
     environment:
       - REDIS_REPLICATION_MODE=master
     restart: unless-stopped
 
 
 volumes:
+  database-data-authservice:
+  database-data-authserviceuser:
+  database-data-logservice:
+  database-data-internalservice:
   rabbitmqdata:
     driver: local
+
 
