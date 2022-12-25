@@ -1,8 +1,8 @@
 ﻿using CommonLibrary.AspNetCore;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using MassTransit;
 using Microsoft.AspNetCore.Mvc;
-using ILogger = Serilog.ILogger;
 
 namespace InternalService.Controllers.v1;
 
@@ -11,13 +11,14 @@ namespace InternalService.Controllers.v1;
 [ApiController]
 public class InternalController : ControllerBase
 {
-    private readonly ILogger _logger;
+    private readonly ILoggingService _loggingService;
     private readonly IObjectRepository<IIObject> _objectRepository;
 
-    public InternalController(IObjectRepository<IIObject> objectRepository, ILogger logger)
+    public InternalController(IObjectRepository<IIObject> objectRepository,
+        ILoggingService loggingService)
     {
         _objectRepository = objectRepository;
-        _logger = logger;
+        _loggingService = loggingService;
     }
 
 

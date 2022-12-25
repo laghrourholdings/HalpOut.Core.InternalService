@@ -1,10 +1,8 @@
 ﻿using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Contracts.Objects;
-using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using MassTransit;
-using ILogger = Serilog.ILogger;
 
 namespace InternalService.Slots.Objects;
 

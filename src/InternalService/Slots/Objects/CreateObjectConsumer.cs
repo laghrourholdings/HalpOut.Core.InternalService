@@ -1,13 +1,9 @@
-﻿using System.Net;
-using CommonLibrary.AspNetCore;
+﻿using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Contracts.Objects;
-using CommonLibrary.AspNetCore.Logging;
 using CommonLibrary.AspNetCore.Logging.LoggingService;
-using CommonLibrary.AspNetCore.ServiceBus;
-using CommonLibrary.AspNetCore.Settings;
 using CommonLibrary.Core;
 using MassTransit;
-using ILogger = Serilog.ILogger;
+
 namespace InternalService.Slots.Objects;
 
 public class CreateObjectConsumer : IConsumer<CreateObject>

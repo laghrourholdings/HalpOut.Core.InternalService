@@ -1,12 +1,12 @@
 ﻿using System.Linq.Expressions;
 using AutoMapper;
 using CommonLibrary.AspNetCore;
-using CommonLibrary.AspNetCore.Logging;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using InternalService.EFCore;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using ILogger = Serilog.ILogger;
+
 namespace InternalService.Implementations;
 
 public class ObjectRepository : IObjectRepository<IIObject>
@@ -14,20 +14,20 @@ public class ObjectRepository : IObjectRepository<IIObject>
     private readonly ServiceDbContext _context;
     private readonly IPublishEndpoint _publishEndpoint;
     private static IMapper _mapper;
-    private readonly ILogger _logger;
+    private readonly ILoggingService _loggingService;
     private readonly IConfiguration _config;
 
     public ObjectRepository(
         ServiceDbContext context,
         IPublishEndpoint publishEndpoint,
         IMapper mapper,
-        ILogger logger,
+        ILoggingService loggingService,
         IConfiguration config)
     {
         _context = context;
         _publishEndpoint = publishEndpoint;
         _mapper = mapper;
-        _logger = logger;
+        _loggingService = loggingService;
         _config = config;
     }
 
@@ -57,12 +57,12 @@ public class ObjectRepository : IObjectRepository<IIObject>
         IIObject? obj = await _context.Objects.SingleOrDefaultAsync(x => x.Id == entity.Id);
         if (obj is not null)
         {
-            _logger.Error("Object {entity} already exists", entity);
+            _loggingService.Error($"Object with Id {entity.Id} already exists");
             throw new Exception($"Object with Id {entity.Id} already exists");
         }
         await _context.Objects.AddAsync(entity);
         await _context.SaveChangesAsync();
-        _logger.Information("Object created: {@Object}",entity);
+        _loggingService.Information($"Object created: {entity.Id}");
     }
 
     public Task RangeAsync(IEnumerable<IIObject> entity)
@@ -74,7 +74,7 @@ public class ObjectRepository : IObjectRepository<IIObject>
     public async Task UpdateAsync(IIObject entity)
     {
         _context.Update(entity);
-        _logger.InformationToBusLog(_config,  $"Object {entity.Id} assigned {entity.LogHandleId}" , entity.LogHandleId, _publishEndpoint);
+        _loggingService.Information($"Object {entity.Id} assigned {entity.LogHandleId}" , entity.LogHandleId);
         await _context.SaveChangesAsync();
     }
 
