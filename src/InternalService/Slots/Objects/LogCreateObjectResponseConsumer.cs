@@ -1,5 +1,7 @@
 ﻿using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Contracts.Objects;
+using CommonLibrary.AspNetCore.Logging;
+using CommonLibrary.AspNetCore.Logging.LoggingService;
 using CommonLibrary.Core;
 using MassTransit;
 using ILogger = Serilog.ILogger;
@@ -10,29 +12,32 @@ public class LogCreateObjectResponseConsumer : IConsumer<UpdateObjectLogHandle>
 {
     
     private readonly IObjectRepository<IIObject> _objectRepository;
-    private readonly ILogger _logger;
+    private readonly ILoggingService _loggingService;
     private readonly IConfiguration _config;
 
     public LogCreateObjectResponseConsumer(
         IObjectRepository<IIObject> objectRepository,
-        ILogger logger,
+        ILoggingService loggingService,
         IConfiguration config)
     {
         _objectRepository = objectRepository;
-        _logger = logger;
+        _loggingService = loggingService;
         _config = config;
     }
 
     
     public async Task Consume(ConsumeContext<UpdateObjectLogHandle> context)
     {
-        var logContext = context.Message.Payload;
-        var obj = logContext.Subject;
+        var objectId = context.Message.ObjectId;
+        var logHandleId = context.Message.LogHandleId;
+        
+        var obj = await _objectRepository.GetAsync(x=>x.Id == objectId);
         if (obj == null)
         {
-            _logger.Error("{@Descriptor} | Object is null", logContext);
+            _loggingService.ErrorToLogService($"Object {objectId} is null", logHandleId);
             await Task.CompletedTask; 
         }
+        obj.LogHandleId = logHandleId;
         await _objectRepository.UpdateAsync(obj);
         await Task.CompletedTask;
     }

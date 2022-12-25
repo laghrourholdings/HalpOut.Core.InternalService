@@ -23,7 +23,7 @@ services:
       POSTGRES_PASSWORD: password 
       POSTGRES_DB: default_database 
     volumes:
-      - ./database-data-logservice:/var/lib/postgresql/data
+      - ./db-data/database-data-logservice:/var/lib/postgresql/data
       
   internalservice_postgredb:
     image: 'postgres'
@@ -36,7 +36,7 @@ services:
       POSTGRES_PASSWORD: password 
       POSTGRES_DB: default_database 
     volumes:
-      - ./database-data-internalservice:/var/lib/postgresql/data
+      - ./db-data/database-data-internalservice:/var/lib/postgresql/data
   
   authservice_postgredb:
     image: 'postgres'
@@ -55,7 +55,7 @@ services:
       POSTGRES_PASSWORD: password 
       POSTGRES_DB: default_database 
     volumes:
-      - ./database-data-authservice:/var/lib/postgresql/data
+      - ./db-data/database-data-authservice:/var/lib/postgresql/data
   authservice_user_postgredb:
     image: 'postgres'
 
@@ -67,7 +67,7 @@ services:
       POSTGRES_PASSWORD: password 
       POSTGRES_DB: default_database
     volumes:
-      - ./database-data-authserviceuser:/var/lib/postgresql/data
+      - ./db-data/database-data-authserviceuser:/var/lib/postgresql/data
   authservice_redis:
     image: "redis:alpine"
     
