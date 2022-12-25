@@ -34,7 +34,7 @@ public class LogCreateObjectResponseConsumer : IConsumer<UpdateObjectLogHandle>
         var obj = await _objectRepository.GetAsync(x=>x.Id == objectId);
         if (obj == null)
         {
-            _loggingService.ErrorToLogService($"Object {objectId} is null", logHandleId);
+            _loggingService.Error($"Object {objectId} is null", logHandleId);
             await Task.CompletedTask; 
         }
         obj.LogHandleId = logHandleId;
