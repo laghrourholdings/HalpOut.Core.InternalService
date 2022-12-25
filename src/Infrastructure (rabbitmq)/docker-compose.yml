@@ -77,8 +77,8 @@ services:
       - "6379:6379"
     
     volumes:
-      - ./www:/home/distressedpro/public_html
-      - ./conf:/etc/apache2/sites-available
+      - ./db-data/www:/home/distressedpro/public_html
+      - ./db-data/conf:/etc/apache2/sites-available
       
     environment:
       - REDIS_REPLICATION_MODE=master

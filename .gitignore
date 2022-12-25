@@ -9,7 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
-src/Infrastructure\ (rabbitmq)/database-data*/
+src/Infrastructure\ (rabbitmq)/db-data/
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
