@@ -1,7 +1,5 @@
 using CommonLibrary.AspNetCore;
 using CommonLibrary.Core;
-using InternalService.EFCore;
-using InternalService.Implementations;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,9 +8,7 @@ var  MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
 var logger = new LoggerConfiguration().WriteTo.Console();
 builder.Services.AddCommonLibrary(builder.Configuration, builder.Logging, logger , MyAllowSpecificOrigins);
-builder.Services.AddScoped<IObjectRepository<IIObject>, ObjectRepository>();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-builder.Services.AddDbContext<ServiceDbContext>();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();

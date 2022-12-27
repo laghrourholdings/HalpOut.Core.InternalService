@@ -23,10 +23,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="EFCore" />
       <Folder Include="Migrations" />
-      <Folder Include="Signals" />
+      <Folder Include="ServiceBus\Consumer Contracts" />
       <Folder Update="..\Infrastructure (parent)" />
-      <Folder Include="Slots\Logs" />
     </ItemGroup>
 
     <ItemGroup>
