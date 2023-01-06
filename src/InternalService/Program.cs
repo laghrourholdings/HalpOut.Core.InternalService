@@ -1,5 +1,4 @@
 using CommonLibrary.AspNetCore;
-using CommonLibrary.Core;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
