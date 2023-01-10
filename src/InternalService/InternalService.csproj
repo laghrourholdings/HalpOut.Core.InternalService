@@ -23,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Controllers\v1" />
       <Folder Include="EFCore" />
       <Folder Include="Migrations" />
       <Folder Include="ServiceBus\Consumer Contracts" />
