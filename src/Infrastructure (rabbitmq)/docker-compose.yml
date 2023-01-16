@@ -10,35 +10,39 @@ services:
       - RABBITMQ_DEFAULT_USER=user
       - RABBITMQ_DEFAULT_PASS=user
     ports:
-      - 5672:5672
-      - 15672:15672
+      - "5672:5672"
+      - "15672:15672"
     hostname: rabbitmq-fy
+    restart: unless-stopped
+    
   logservice_postgredb:
     image: 'postgres'
     ports:
-      - 6000:5432
+      - "6011:5432"
     environment:
       POSTGRES_HOST: 127.0.0.1
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password 
       POSTGRES_DB: default_database 
     volumes:
-      - ./db-data/database-data-logservice:/var/lib/postgresql/data
-      
+      - ./db-data/logservice:/var/lib/postgresql/data
+    restart: unless-stopped
+    
   internalservice_postgredb:
     image: 'postgres'
 
     ports:
-      - 6001:5432
+      - "6001:5432"
     environment:
       POSTGRES_HOST: 127.0.0.1
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password 
       POSTGRES_DB: default_database 
     volumes:
-      - ./db-data/database-data-internalservice:/var/lib/postgresql/data
-  
-  authservice_postgredb:
+      - ./db-data/internalservice:/var/lib/postgresql/data
+    restart: unless-stopped
+    
+  authservice_user_postgredb:
     image: 'postgres'
     # By default, a Postgres database is running on the 5432 port.
     # If we want to access the database from our computer (outside the container),
@@ -48,48 +52,49 @@ services:
     # but take into consideration that it will change the way
     # you are connecting to your database.
     ports:
-      - 6002:5432
+      - "6013:5432"
     environment:
       POSTGRES_HOST: 127.0.0.1
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: password 
       POSTGRES_DB: default_database 
     volumes:
-      - ./db-data/database-data-authservice:/var/lib/postgresql/data
-  authservice_user_postgredb:
-    image: 'postgres'
-
-    ports:
-      - 6022:5432
-    environment:
-      POSTGRES_HOST: 127.0.0.1
-      POSTGRES_USER: postgres 
-      POSTGRES_PASSWORD: password 
-      POSTGRES_DB: default_database
-    volumes:
-      - ./db-data/database-data-authserviceuser:/var/lib/postgresql/data
-  authservice_redis:
+      - ./db-data/authservice:/var/lib/postgresql/data
+    restart: unless-stopped
+      
+  authservice_userCache_redis:
     image: "redis:alpine"
     
     command: redis-server
     
     ports:
-      - "6379:6379"
+      - "6023:6379"
     
     volumes:
-      - ./db-data/www:/home/distressedpro/public_html
-      - ./db-data/conf:/etc/apache2/sites-available
+      - ./db-data/authservice_redis/www:/home/distressedpro/public_html
+      - ./db-data/authservice_redis/conf:/etc/apache2/sites-available
       
     environment:
       - REDIS_REPLICATION_MODE=master
     restart: unless-stopped
 
+  memberservice_userCache_redis:
+    image: "redis:alpine"
+
+    command: redis-server
+
+    ports:
+      - "602:6379"
+
+    volumes:
+      - ./db-data/authservice_redis/www:/home/distressedpro/public_html
+      - ./db-data/authservice_redis/conf:/etc/apache2/sites-available
+
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    restart: unless-stopped
 
 volumes:
-  database-data-authservice:
-  database-data-authserviceuser:
-  database-data-logservice:
-  database-data-internalservice:
   rabbitmqdata:
     driver: local
 

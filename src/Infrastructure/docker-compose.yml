@@ -58,10 +58,10 @@ services:
     depends_on:
       - rabbitmq
       - logservice
-  gatewayservice:
-    container_name: gatewayservice
+  MemberService:
+    container_name: memberservice
     build:
-      context: ../../../GatewayService/src/GatewayService/
+      context: ../../../MemberService/src/MemberService/
       dockerfile: ./Dockerfile
     restart: on-failure
     networks:
