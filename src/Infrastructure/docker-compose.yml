@@ -73,6 +73,7 @@ services:
     depends_on:
       - rabbitmq
       - logservice
+      - authservice
   billingservice:
     container_name: billingservice
     build:
