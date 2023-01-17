@@ -1,4 +1,3 @@
-using CommonLibrary.AspNetCore;
 using CommonLibrary.AspNetCore.Core;
 using Serilog;
 
